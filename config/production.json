@@ -1,0 +1,10 @@
+{
+    "dbURL" : "mongodb://chatcat:nomanchatcat@ds047591.mongolab.com:47591/chatcat",
+    "sessionSecret" : "noman7nomanProduction",
+    "fb": {
+        "appID" : "702302459878170",
+        "appSecret" : "1de2b4ff65b939685ffc1086b5c9bf5e",
+        "callbackURL" : "http://localhost:3000/auth/facebook/callback"
+    },
+    "host" : "http://localhost:3000"
+}

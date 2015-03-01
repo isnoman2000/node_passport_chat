@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ChatCAT</title>
+	<link rel="stylesheet" href="../css/room.css">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(function(){
+            var host = '{{config.host}}';
+            var messages = io.connect(host+'/messages');
+            var room_number = '{{room_number}}';
+            var full_name = '{{user.fullName}}';
+            var profilePic = '{{user.profilePic}}';
+
+            messages.on('connect',function(){
+                console.log('Connected !!!!!!');
+                messages.emit('joinroom', {room: room_number, user: full_name, userPic : userPic});
+            });
+
+            $(document).on('keyup','.newmessage', function(e){
+                if(e.which === 13 && $(this).val() !==''){
+                    messages.emit('sendmessage', {
+                        room_number : room_number,
+                        user_name : full_name,
+                        profilePic : profilePic,
+                        message : $(this).val()
+
+                    });
+                }
+
+                loadMessageFeed(profilePic, $(this).val(), full_name);
+            })
+
+            function loadMessageFeed(userPic, message, user_name){
+
+                var str  = '<li>';
+                    str += '<div class="msgbox">';
+                    str += '<div class="pic"><img src="'+ userPic +'">'+user_name+'</div>';
+                    str += '<div class="msg"><p>'+ message +'</p></div>';
+                    str += '</div>';
+                    str += '</li>'
+
+                    $('str').prependTo($('.messages'));
+                }
+
+        });
+    </script>
+</head>
+<body>
+<div class="rm-container">
+		<h1 class="rm-title">ChatCAT</h1>
+		<div class="rm-userbox">
+			<img src="{{user.profilePic}}" class="userPic">
+			<h3 class="userName">{{user.fullName}} | <a href="/logout">Logout</a><a href="#">More Chatrooms</a></h3>
+		</div>
+		<div class="rm-roomname">
+			<h5>{{room_name}}</h5>
+		</div>
+		<div class="rm-messages">
+			<ul class="messages">
+				<li>
+					<div class="msgbox">
+						<div class="pic"><img src="{{user.profilePic}}">{{user.fullName}}</div>
+						<div class="msg"><p></p></div>
+					</div>
+				</li> 
+			</ul>
+		</div>
+		<div class="rm-users">
+			<ul class="users">
+				<li><img src="{{user.profilePic}}"><h5>{{user.fullName}}</h5></li>
+			</ul>
+		</div>
+		<div class="rm-newmessage">
+			<input type="text" class="newmessage" autocomplete="off" placeholder="Type in your message and press enter !">
+			
+		</div>
+	</div>
+</body>
+</html>
